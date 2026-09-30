@@ -1,0 +1,54 @@
+[project]
+name = "long-image-to-video"
+version = "0.1.0"
+description = "Turn one or more tall screenshots into a smooth scrolling MP4 video, with GPU-accelerated encoding and a Tkinter GUI"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "LLL-404" }]
+requires-python = ">=3.10"
+keywords = ["long-image", "screenshot", "scrolling-video", "ffmpeg", "nvenc"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Video :: Conversion",
+]
+dependencies = [
+    "opencv-python>=4.5.0",
+    "pillow>=9.0",
+    "numpy",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.15"]
+
+[project.scripts]
+long-image-to-video = "main_gui:main"
+
+[tool.setuptools]
+py-modules = ["converter", "main_gui"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+python_files = ["test_*.py"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+extend-exclude = [".venv", "build", "dist", "__pycache__", ".pytest_cache", ".ruff_cache", "outputs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]  # line length is left to the formatter
+
+[tool.ruff.lint.per-file-ignores]
+# tests may inject sys.path entries before imports
+"**/tests/*" = ["E402"]
