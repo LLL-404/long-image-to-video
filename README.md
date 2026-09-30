@@ -24,7 +24,7 @@ Fed up with sharing a 10,000-pixel-tall screenshot as 20 separate images? Drop i
 ## Requirements
 
 - Python **3.10+**
-- **FFmpeg** available on `PATH` (checked at runtime; used for pipe encoding)
+- **FFmpeg** (optional but recommended) — enables GPU-accelerated H.264 encoding (NVENC / QSV / AMF). Without it, the tool falls back to OpenCV's built-in CPU encoder (MPEG-4 Part 2) — works everywhere, but files are larger.
 
 ## Installation
 
@@ -89,7 +89,7 @@ print(f"Saved to {out}")
 1. Images are loaded (EXIF-transposed, flattened onto white, resized to the target width) in a thread pool and stitched vertically.
 2. Scroll offsets are generated from the chosen easing curve.
 3. Frames are streamed to the encoder — no full-length numpy copy of the merged image is ever materialized, so very tall images stay memory-friendly.
-4. Encoding prefers a detected GPU encoder (NVENC / QSV / AMF). If the resolution exceeds GPU limits (height > 4096 or > 36,864 macroblocks), it first tries downscaling (≤ 30% reduction), otherwise falls back to CPU encoding.
+4. Encoding prefers a detected GPU encoder (NVENC / QSV / AMF). If the resolution exceeds GPU limits (height > 4096 or > 36,864 macroblocks), it first tries downscaling (≤ 30% reduction); if GPU encoding fails at runtime, it falls back to CPU encoding via OpenCV — which does not require FFmpeg at all.
 
 ## Development
 
